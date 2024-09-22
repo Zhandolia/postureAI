@@ -1,30 +1,37 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 const ProfileScreen = () => {
+  const navigation = useNavigation(); // Initialize navigation
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Profile</Text>
 
-      <View style={styles.section}>
+      {/* Workout History Section */}
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('WorkoutHistory')}>
         <Text style={styles.sectionTitle}>Workout History</Text>
         <Text style={styles.sectionContent}>Your past workouts will appear here.</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.section}>
+      {/* Body Areas Targeted Section */}
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('BodyAreasTargeted')}>
         <Text style={styles.sectionTitle}>Body Areas Targeted</Text>
         <Text style={styles.sectionContent}>See which muscles you've been focusing on.</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.section}>
+      {/* Progress Section */}
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Progress')}>
         <Text style={styles.sectionTitle}>Progress</Text>
         <Text style={styles.sectionContent}>Track your progress over time.</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.section}>
+      {/* Settings Section */}
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Settings')}>
         <Text style={styles.sectionTitle}>Settings</Text>
         <Text style={styles.sectionContent}>Customize your app experience.</Text>
-      </View>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

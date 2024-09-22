@@ -1,14 +1,18 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack'; // Import Stack Navigator
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './screens/home/HomeScreen';
 import RecordScreen from './screens/record/RecordScreen';
 import UploadScreen from './screens/upload/UploadScreen';
-import VideoUploadScreen from './screens/upload/VideoUploadScreen'; // Import the new screen
+import VideoUploadScreen from './screens/upload/VideoUploadScreen';
 import ProfileScreen from './screens/profile/ProfileScreen';
+import WorkoutHistoryScreen from './screens/profile/WorkoutHistoryScreen';
+import BodyAreasTargetedScreen from './screens/profile/BodyAreasTargeted';
+import ProgressScreen from './screens/profile/ProgressScreen';
+import SettingsScreen from './screens/profile/SettingsScreen';
 
 // Create a Stack Navigator for Upload-related screens
 const UploadStack = createStackNavigator();
@@ -19,14 +23,49 @@ function UploadStackScreen() {
       <UploadStack.Screen
         name="Upload"
         component={UploadScreen}
-        options={{ headerShown: false }} // Disable header for Upload screen
+        options={{ headerShown: false }}
       />
       <UploadStack.Screen
         name="VideoUpload"
         component={VideoUploadScreen}
-        options={{ headerShown: false }} // Disable header for VideoUpload screen
+        options={{ headerShown: false }}
       />
     </UploadStack.Navigator>
+  );
+}
+
+// Create a Stack Navigator for Profile-related screens
+const ProfileStack = createStackNavigator();
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }} // Hide header for the main profile screen
+      />
+      <ProfileStack.Screen
+        name="WorkoutHistory"
+        component={WorkoutHistoryScreen}
+        options={{ headerTitle: '' }}
+      />
+      <ProfileStack.Screen
+        name="BodyAreasTargeted"
+        component={BodyAreasTargetedScreen}
+        options={{ headerTitle: '' }}
+      />
+      <ProfileStack.Screen
+        name="Progress"
+        component={ProgressScreen}
+        options={{ headerTitle: '' }}
+      />
+      <ProfileStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerTitle: '' }}
+      />
+    </ProfileStack.Navigator>
   );
 }
 
@@ -42,13 +81,13 @@ export default function App() {
             let iconName;
 
             if (route.name === 'Home') {
-              iconName = 'home-outline'; // Home Icon
+              iconName = 'home-outline';
             } else if (route.name === 'Record') {
-              iconName = 'camera-outline'; // Camera Icon
+              iconName = 'camera-outline';
             } else if (route.name === 'Upload') {
-              iconName = 'cloud-upload-outline'; // Upload Icon
+              iconName = 'cloud-upload-outline';
             } else if (route.name === 'Profile') {
-              iconName = 'person-outline'; // Profile Icon
+              iconName = 'person-outline';
             }
 
             return <Icon name={iconName} size={size} color={color} />;
@@ -60,9 +99,8 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Record" component={RecordScreen} />
-        {/* Use the Upload Stack Navigator */}
         <Tab.Screen name="Upload" component={UploadStackScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Profile" component={ProfileStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

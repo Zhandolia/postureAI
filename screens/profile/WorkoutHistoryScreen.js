@@ -1,4 +1,3 @@
-// src/screens/WorkoutHistoryScreen.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
@@ -14,11 +13,11 @@ const WorkoutHistoryScreen = () => {
       <Text style={styles.title}>Workout History</Text>
       <FlatList
         data={historyData}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>{item.date}</Text>
-            <Text>{item.result}</Text>
+            <Text style={styles.dateText}>{item.date}</Text>
+            <Text style={styles.resultText}>{item.result}</Text>
           </View>
         )}
       />
@@ -29,20 +28,32 @@ const WorkoutHistoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F9FAFB',
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#1D1C1F',
     marginBottom: 20,
+    textAlign: 'center',
   },
   item: {
+    backgroundColor: '#F4F6F8',
     padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderRadius: 10,
+    marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#636165',
+  },
+  resultText: {
+    fontSize: 16,
+    color: '#F34533',
+    fontWeight: 'bold',
   },
 });
 

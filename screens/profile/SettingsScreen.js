@@ -1,4 +1,3 @@
-// src/screens/SettingsScreen.js
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 
@@ -17,7 +16,7 @@ const SettingsScreen = () => {
       </View>
       <View style={styles.setting}>
         <Text style={styles.settingText}>Change Units</Text>
-        <Text>Metric</Text> {/* Add unit selection functionality later */}
+        <Text style={styles.unitText}>Metric</Text>
       </View>
     </View>
   );
@@ -26,24 +25,32 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F9FAFB',
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#1D1C1F',
     marginBottom: 20,
+    textAlign: 'center',
   },
   setting: {
+    backgroundColor: '#F4F6F8',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
   },
   settingText: {
     fontSize: 18,
+    color: '#636165',
+  },
+  unitText: {
+    fontSize: 16,
+    color: '#F34533',
   },
 });
 
