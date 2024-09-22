@@ -12,17 +12,25 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     if (!isLoaded) return;
+
     try {
       const result = await signIn.create({
         identifier: email,
         password: password,
       });
+
       if (result.status === 'complete') {
-        navigation.navigate('Home');
+        // Navigate to SignedInTabs after successful login
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'SignedInTabs' }],
+        });
       } else {
         setErrorMessage('Login failed, please try again.');
+        console.error('Login result:', result);
       }
     } catch (err) {
+      // Log the full error to identify the issue
       console.error('Error during login:', err);
       setErrorMessage('Login failed, please check your credentials.');
     }
