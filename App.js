@@ -4,11 +4,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack'; // Import Stack Navigator
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import HomeScreen from './screens/HomeScreen';
-import RecordScreen from './screens/RecordScreen';
-import UploadScreen from './screens/UploadScreen';
-import VideoUploadScreen from './screens/VideoUploadScreen'; // Import the new screen
-import ProfileScreen from './screens/ProfileScreen';
+import HomeScreen from './screens/home/HomeScreen';
+import RecordScreen from './screens/record/RecordScreen';
+import UploadScreen from './screens/upload/UploadScreen';
+import VideoUploadScreen from './screens/upload/VideoUploadScreen'; // Import the new screen
+import ProfileScreen from './screens/profile/ProfileScreen';
 
 // Create a Stack Navigator for Upload-related screens
 const UploadStack = createStackNavigator();
