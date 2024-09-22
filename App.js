@@ -1,12 +1,34 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack'; // Import Stack Navigator
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './screens/HomeScreen';
 import RecordScreen from './screens/RecordScreen';
 import UploadScreen from './screens/UploadScreen';
+import VideoUploadScreen from './screens/VideoUploadScreen'; // Import the new screen
 import ProfileScreen from './screens/ProfileScreen';
+
+// Create a Stack Navigator for Upload-related screens
+const UploadStack = createStackNavigator();
+
+function UploadStackScreen() {
+  return (
+    <UploadStack.Navigator>
+      <UploadStack.Screen
+        name="Upload"
+        component={UploadScreen}
+        options={{ headerShown: false }} // Disable header for Upload screen
+      />
+      <UploadStack.Screen
+        name="VideoUpload"
+        component={VideoUploadScreen}
+        options={{ headerShown: false }} // Disable header for VideoUpload screen
+      />
+    </UploadStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +60,8 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Record" component={RecordScreen} />
-        <Tab.Screen name="Upload" component={UploadScreen} />
+        {/* Use the Upload Stack Navigator */}
+        <Tab.Screen name="Upload" component={UploadStackScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
