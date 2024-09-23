@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,7 +15,6 @@ import BodyAreasTargetedScreen from './screens/profile/BodyAreasTargeted';
 import ProgressScreen from './screens/profile/ProgressScreen';
 import SettingsScreen from './screens/profile/SettingsScreen';
 
-// Create a Stack Navigator for Upload-related screens
 const UploadStack = createStackNavigator();
 
 function UploadStackScreen() {
@@ -34,7 +34,16 @@ function UploadStackScreen() {
   );
 }
 
-// Create a Stack Navigator for Profile-related screens
+// Custom Header with Back Button
+const HeaderWithBackButton = ({ navigation, title }) => (
+  <View style={styles.header}>
+    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <Icon name="arrow-back" size={24} color="#F34533" />
+    </TouchableOpacity>
+    <Text style={styles.headerTitle}>{title}</Text>
+  </View>
+);
+
 const ProfileStack = createStackNavigator();
 
 function ProfileStackScreen() {
@@ -43,27 +52,35 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerShown: false }} // Hide header for the main profile screen
+        options={{ headerShown: false }}
       />
       <ProfileStack.Screen
         name="WorkoutHistory"
         component={WorkoutHistoryScreen}
-        options={{ headerTitle: '' }}
+        options={({ navigation }) => ({
+          header: () => <HeaderWithBackButton navigation={navigation} title="Workout History" />,
+        })}
       />
       <ProfileStack.Screen
         name="BodyAreasTargeted"
         component={BodyAreasTargetedScreen}
-        options={{ headerTitle: '' }}
+        options={({ navigation }) => ({
+          header: () => <HeaderWithBackButton navigation={navigation} title="Body Areas Targeted" />,
+        })}
       />
       <ProfileStack.Screen
         name="Progress"
         component={ProgressScreen}
-        options={{ headerTitle: '' }}
+        options={({ navigation }) => ({
+          header: () => <HeaderWithBackButton navigation={navigation} title="Progress" />,
+        })}
       />
       <ProfileStack.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{ headerTitle: '' }}
+        options={({ navigation }) => ({
+          header: () => <HeaderWithBackButton navigation={navigation} title="Settings" />,
+        })}
       />
     </ProfileStack.Navigator>
   );
@@ -105,3 +122,22 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#F9FAFB',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F4F6F8',
+  },
+  backButton: {
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#F9FAFB',
+  },
+});
