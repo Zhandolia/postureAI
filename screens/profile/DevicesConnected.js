@@ -1,17 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
-const ProgressScreen = () => {
+const DevicesConnectedScreen = () => {
   const deviceData = [
-    { label: 'Calories Burnt Today', value: '450' },
-    { label: 'Steps Today', value: '10,000' },
-    { label: 'Heart BPM', value: '72' },
-    // Add more device data as necessary
+    { label: 'Garmin Watch', value: 'Connected' },
+    { label: 'Apple Watch', value: 'Connected' },
+    { label: 'Strava', value: 'Connected' },
   ];
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Progress</Text>
+      <Text style={styles.title}>Connected Devices</Text>
       {deviceData.map((item, index) => (
         <View key={index} style={styles.dataContainer}>
           <Text style={styles.dataLabel}>{item.label}</Text>
@@ -54,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProgressScreen;
+export default DevicesConnectedScreen;

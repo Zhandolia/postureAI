@@ -9,29 +9,31 @@ const ProfileScreen = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Profile</Text>
 
-      {/* Workout History Section */}
-      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('WorkoutHistory')}>
-        <Text style={styles.sectionTitle}>Workout History</Text>
-        <Text style={styles.sectionContent}>Your past workouts will appear here.</Text>
-      </TouchableOpacity>
-
-      {/* Body Areas Targeted Section */}
       <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('BodyAreasTargeted')}>
         <Text style={styles.sectionTitle}>Body Areas Targeted</Text>
         <Text style={styles.sectionContent}>See which muscles you've been focusing on.</Text>
       </TouchableOpacity>
 
-      {/* Progress Section */}
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('DevicesConnected')}>
+        <Text style={styles.sectionTitle}>Devices Connected</Text>
+        <Text style={styles.sectionContent}>View data from your connected devices.</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('WorkoutHistory')}>
+        <Text style={styles.sectionTitle}>Workout History</Text>
+        <Text style={styles.sectionContent}>Your past workouts will appear here.</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Progress')}>
         <Text style={styles.sectionTitle}>Progress</Text>
         <Text style={styles.sectionContent}>Track your progress over time.</Text>
       </TouchableOpacity>
 
-      {/* Settings Section */}
       <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Settings')}>
         <Text style={styles.sectionTitle}>Settings</Text>
         <Text style={styles.sectionContent}>Customize your app experience.</Text>
       </TouchableOpacity>
+
     </ScrollView>
   );
 };

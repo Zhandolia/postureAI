@@ -45,11 +45,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#636165',
   },
   unitText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#F34533',
   },
 });

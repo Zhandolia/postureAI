@@ -40,9 +40,9 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#F4F6F8',
-    padding: 15,
+    padding: 20,
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     color: '#636165',
   },
   resultText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#F34533',
     fontWeight: 'bold',
   },
