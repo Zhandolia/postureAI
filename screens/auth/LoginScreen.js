@@ -1,39 +1,47 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSignUp } from '@clerk/clerk-expo';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSignIn } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const { isLoaded, signUp } = useSignUp();
+  const { isLoaded, signIn } = useSignIn();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleEmailSignUp = async () => {
+  const handleLogin = async () => {
     if (!isLoaded) return;
+    setLoading(true);
+
     try {
-      await signUp.create({
-        emailAddress: email,
+      const result = await signIn.create({
+        identifier: email,
         password: password,
-        username: 'yourusername', // Optionally set the username
       });
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
-      navigation.navigate('Verification', { email, password });
+
+      if (result.status === 'complete') {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+      } else {
+        setErrorMessage('Login failed, please try again.');
+      }
     } catch (err) {
-      console.error('Error during sign-up:', err);
-      setErrorMessage('Failed to send verification code. Please try again.');
+      setErrorMessage('Login failed, please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up for Posture.ai</Text>
+      <Text style={styles.title}>Log In</Text>
 
-      {/* Display error message if sign-up fails */}
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-      {/* Email Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter email"
@@ -43,7 +51,6 @@ const LoginScreen = () => {
         autoCapitalize="none"
       />
 
-      {/* Password Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter password"
@@ -53,14 +60,12 @@ const LoginScreen = () => {
         autoCapitalize="none"
       />
 
-      {/* Sign Up Button */}
-      <TouchableOpacity style={styles.button} onPress={handleEmailSignUp}>
-        <Text style={styles.buttonText}>Sign Up with Email</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Log In</Text>}
       </TouchableOpacity>
 
-      {/* Button to navigate to LoginPage */}
-      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('LoginPage')}>
-        <Text style={styles.loginButtonText}>Already have an account? Log In</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -105,12 +110,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  loginButton: {
-    marginTop: 20,
-  },
-  loginButtonText: {
+  linkText: {
     color: '#F34533',
-    fontSize: 16,
+    marginTop: 20,
   },
 });
 

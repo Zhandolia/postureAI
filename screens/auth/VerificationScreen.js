@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const VerificationScreen = () => {
-  const { isLoaded, signUp } = useSignUp();
+  const { signUp, isLoaded } = useSignUp();
   const [verificationCode, setVerificationCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
-  const { email } = route.params; // Email is passed from the previous screen
-
-  useEffect(() => {
-    if (!signUp || !isLoaded) {
-      setErrorMessage('Sign-up object is not initialized properly.');
-    }
-  }, [signUp, isLoaded]);
+  const { email } = route.params;
 
   const handleVerifyCode = async () => {
     if (!isLoaded) return;
+    setLoading(true);
+
     try {
       const result = await signUp.attemptEmailAddressVerification({
         code: verificationCode,
       });
 
       if (result.status === 'complete') {
-        // Redirect to HomeScreen if verification is successful
         navigation.navigate('Home');
       } else {
         setErrorMessage('Invalid code. Please try again.');
       }
     } catch (err) {
-      console.error('Verification failed:', err);
-      setErrorMessage('Verification failed. Please check the code and try again.');
+      setErrorMessage('Verification failed, please check the code.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,7 +39,6 @@ const VerificationScreen = () => {
 
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-      {/* Input for verification code */}
       <TextInput
         style={styles.input}
         placeholder="Enter code"
@@ -52,14 +48,12 @@ const VerificationScreen = () => {
         autoCapitalize="none"
       />
 
-      {/* Button to verify the code */}
-      <TouchableOpacity style={styles.button} onPress={handleVerifyCode}>
-        <Text style={styles.buttonText}>Verify Code</Text>
+      <TouchableOpacity style={styles.button} onPress={handleVerifyCode} disabled={loading}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Verify Code</Text>}
       </TouchableOpacity>
 
-      {/* Back button to return to the LoginScreen */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={styles.linkText}>Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -104,12 +98,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  backButton: {
-    marginTop: 20,
-  },
-  backButtonText: {
+  linkText: {
     color: '#F34533',
-    fontSize: 16,
+    marginTop: 20,
   },
 });
 

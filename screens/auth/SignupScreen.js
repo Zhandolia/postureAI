@@ -1,49 +1,44 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSignIn } from '@clerk/clerk-expo';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSignUp } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
 
-const LoginPage = () => {
-  const { isLoaded, signIn } = useSignIn();
+const SignupScreen = () => {
+  const { isLoaded, signUp } = useSignUp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     if (!isLoaded) return;
+    setLoading(true);
 
     try {
-      const result = await signIn.create({
-        identifier: email,
+      const result = await signUp.create({
+        emailAddress: email,
         password: password,
       });
 
-      if (result.status === 'complete') {
-        // Navigate to SignedInTabs after successful login
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'SignedInTabs' }],
-        });
+      if (result.status === 'needs_first_factor') {
+        navigation.navigate('Verification', { email });
       } else {
-        setErrorMessage('Login failed, please try again.');
-        console.error('Login result:', result);
+        setErrorMessage('Signup failed, please try again.');
       }
     } catch (err) {
-      // Log the full error to identify the issue
-      console.error('Error during login:', err);
-      setErrorMessage('Login failed, please check your credentials.');
+      setErrorMessage('Signup failed, please check your details.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In to Posture.ai</Text>
+      <Text style={styles.title}>Sign Up</Text>
 
-      {/* Display error message */}
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-      {/* Email Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter email"
@@ -53,7 +48,6 @@ const LoginPage = () => {
         autoCapitalize="none"
       />
 
-      {/* Password Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter password"
@@ -63,14 +57,12 @@ const LoginPage = () => {
         autoCapitalize="none"
       />
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={loading}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign Up</Text>}
       </TouchableOpacity>
 
-      {/* Go back to Sign Up button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Don't have an account? Sign Up</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.linkText}>Already have an account? Log In</Text>
       </TouchableOpacity>
     </View>
   );
@@ -115,13 +107,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  backButton: {
-    marginTop: 20,
-  },
-  backButtonText: {
+  linkText: {
     color: '#F34533',
-    fontSize: 16,
+    marginTop: 20,
   },
 });
 
-export default LoginPage;
+export default SignupScreen;

@@ -14,6 +14,9 @@ import WorkoutHistoryScreen from './screens/profile/WorkoutHistoryScreen';
 import BodyAreasTargetedScreen from './screens/profile/BodyAreasTargeted';
 import ProgressScreen from './screens/profile/ProgressScreen';
 import SettingsScreen from './screens/profile/SettingsScreen';
+import LoginScreen from './screens/auth/LoginScreen';
+import SignupScreen from './screens/auth/SignupScreen';
+import VerificationScreen from './screens/auth/VerificationScreen';
 
 const UploadStack = createStackNavigator();
 
