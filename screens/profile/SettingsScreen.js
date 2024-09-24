@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet } from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 const SettingsScreen = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [language, setLanguage] = useState('English');
+  const [units, setUnits] = useState('Metric');
+  const [theme, setTheme] = useState('Use Device Settings');
+
+  const toggleLanguage = () => {
+    setLanguage((prevLanguage) => (prevLanguage === 'English' ? 'Spanish' : 'English'));
+  };
+
+  const toggleUnits = () => {
+    setUnits((prevUnits) => (prevUnits === 'Metric' ? 'Imperial' : 'Metric'));
+  };
+
+  const chooseTheme = () => {
+    Alert.alert(
+      "Choose Theme",
+      "Select the app display theme:",
+      [
+        { text: "Black", onPress: () => setTheme("Black") },
+        { text: "White", onPress: () => setTheme("White") },
+        { text: "Use Device Settings", onPress: () => setTheme("Use Device Settings"), style: "cancel" },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
+      
       <View style={styles.setting}>
         <Text style={styles.settingText}>Enable Notifications</Text>
         <Switch
@@ -14,10 +39,21 @@ const SettingsScreen = () => {
           onValueChange={setNotificationsEnabled}
         />
       </View>
-      <View style={styles.setting}>
-        <Text style={styles.settingText}>Change Units</Text>
-        <Text style={styles.unitText}>Metric</Text>
-      </View>
+      
+      <TouchableOpacity style={styles.setting} onPress={toggleLanguage}>
+        <Text style={styles.settingText}>Language</Text>
+        <Text style={styles.unitText}>{language}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.setting} onPress={toggleUnits}>
+        <Text style={styles.settingText}>Units</Text>
+        <Text style={styles.unitText}>{units}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.setting} onPress={chooseTheme}>
+        <Text style={styles.settingText}>Theme</Text>
+        <Text style={styles.unitText}>{theme}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -50,6 +86,7 @@ const styles = StyleSheet.create({
   },
   unitText: {
     fontSize: 18,
+    fontWeight: 'bold',
     color: '#F34533',
   },
 });
