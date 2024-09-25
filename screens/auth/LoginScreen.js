@@ -14,13 +14,13 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     if (!isLoaded) return;
     setLoading(true);
-
+  
     try {
       const result = await signIn.create({
         identifier: email,
         password: password,
       });
-
+  
       if (result.status === 'complete') {
         navigation.reset({
           index: 0,
@@ -30,7 +30,7 @@ const LoginScreen = () => {
         setErrorMessage('Login failed, please try again.');
       }
     } catch (err) {
-      setErrorMessage('Login failed, please check your credentials.');
+      setErrorMessage('Error: ' + (err.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }

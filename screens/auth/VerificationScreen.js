@@ -15,19 +15,21 @@ const VerificationScreen = () => {
   const handleVerifyCode = async () => {
     if (!isLoaded) return;
     setLoading(true);
-
+  
     try {
       const result = await signUp.attemptEmailAddressVerification({
         code: verificationCode,
       });
-
+  
       if (result.status === 'complete') {
-        navigation.navigate('Home');
+        Alert.alert("Verification Successful", "You will be redirected to the home screen.", [{
+          text: "OK", onPress: () => navigation.navigate('Home')
+        }]);
       } else {
-        setErrorMessage('Invalid code. Please try again.');
+        setErrorMessage('Invalid code, please try again.');
       }
     } catch (err) {
-      setErrorMessage('Verification failed, please check the code.');
+      setErrorMessage('Verification Error: ' + (err.message || 'Check the code'));
     } finally {
       setLoading(false);
     }

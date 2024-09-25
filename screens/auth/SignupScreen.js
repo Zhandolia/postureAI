@@ -23,11 +23,13 @@ const SignupScreen = () => {
 
       if (result.status === 'needs_first_factor') {
         navigation.navigate('Verification', { email });
+      } else if (result.status === 'complete') {
+        navigation.navigate('Home'); // Or other appropriate handling
       } else {
-        setErrorMessage('Signup failed, please try again.');
+        setErrorMessage('Signup incomplete, check requirements.');
       }
     } catch (err) {
-      setErrorMessage('Signup failed, please check your details.');
+      setErrorMessage('Signup Error: ' + (err.message || 'Check your details'));
     } finally {
       setLoading(false);
     }

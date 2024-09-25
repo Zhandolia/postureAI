@@ -20,6 +20,17 @@ import SignupScreen from './screens/auth/SignupScreen';
 import VerificationScreen from './screens/auth/VerificationScreen';
 
 const UploadStack = createStackNavigator();
+const AuthStack = createStackNavigator();
+
+function AuthStackScreen() {
+  return (
+    <AuthStack.Navigator initialRouteName="Login">
+      <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <AuthStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+      <AuthStack.Screen name="Verification" component={VerificationScreen} options={{ headerShown: false }} />
+    </AuthStack.Navigator>
+  );
+}
 
 function UploadStackScreen() {
   return (
@@ -38,7 +49,6 @@ function UploadStackScreen() {
   );
 }
 
-// Custom Header with Back Button
 const HeaderWithBackButton = ({ navigation, title }) => (
   <View style={styles.header}>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
