@@ -22,14 +22,14 @@ const SignupScreen = () => {
       });
 
       if (result.status === 'needs_first_factor') {
+        // Send email verification
+        await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
         navigation.navigate('Verification', { email });
-      } else if (result.status === 'complete') {
-        navigation.navigate('Home'); // Or other appropriate handling
       } else {
-        setErrorMessage('Signup incomplete, check requirements.');
+        setErrorMessage('Sign-up incomplete, please check requirements.');
       }
     } catch (err) {
-      setErrorMessage('Signup Error: ' + (err.message || 'Check your details'));
+      setErrorMessage('Sign-up Error: ' + (err.errors ? err.errors[0].message : 'Check your details.'));
     } finally {
       setLoading(false);
     }
@@ -37,7 +37,7 @@ const SignupScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>Create Your Account</Text>
 
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
@@ -48,6 +48,7 @@ const SignupScreen = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor="#636165"
       />
 
       <TextInput
@@ -57,6 +58,7 @@ const SignupScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
         autoCapitalize="none"
+        placeholderTextColor="#636165"
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={loading}>
@@ -79,29 +81,26 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#1D1C1F',
     marginBottom: 20,
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-  },
   input: {
     width: '100%',
-    padding: 10,
+    padding: 15,
     marginVertical: 10,
     borderRadius: 8,
     borderColor: '#636165',
     borderWidth: 1,
     backgroundColor: '#F4F6F8',
+    color: '#1D1C1F',
   },
   button: {
     backgroundColor: '#F34533',
     paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 10,
+    paddingHorizontal: 80,
+    borderRadius: 8,
     marginTop: 20,
   },
   buttonText: {
@@ -109,9 +108,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
   linkText: {
     color: '#F34533',
     marginTop: 20,
+    fontSize: 14,
   },
 });
 
