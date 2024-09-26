@@ -1,71 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const { isLoaded, signIn } = useSignIn();
+  const { signIn, setActive, isLoaded } = useSignIn();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const navigation = useNavigation();
 
   const handleLogin = async () => {
     if (!isLoaded) return;
     setLoading(true);
-  
+
     try {
-      const result = await signIn.create({
+      const completeSignIn = await signIn.create({
         identifier: email,
         password: password,
       });
-  
-      if (result.status === 'complete') {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
-      } else {
-        setErrorMessage('Login failed, please try again.');
-      }
+
+      // If sign-in is successful, set the session as active
+      await setActive({ session: completeSignIn.createdSessionId });
+
+      // Navigate to MainApp (which contains the Home screen)
+      navigation.navigate('MainApp');
     } catch (err) {
-      setErrorMessage('Error: ' + (err.message || 'Unknown error'));
+      setErrorMessage('Login failed: ' + err.errors[0].message);
     } finally {
       setLoading(false);
     }
   };
 
+  const navigateToSignup = () => {
+    navigation.navigate('Signup');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
-
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      <Text style={styles.title}>Welcome Back!</Text>
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
 
       <TextInput
-        style={styles.input}
-        placeholder="Enter email"
+        placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address"
         autoCapitalize="none"
+        style={styles.input}
       />
 
       <TextInput
-        style={styles.input}
-        placeholder="Enter password"
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         autoCapitalize="none"
+        style={styles.input}
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Log In</Text>}
+        <Text style={styles.buttonText}>{loading ? <ActivityIndicator color="#fff" /> : 'Login'}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
+      <TouchableOpacity style={styles.linkButton} onPress={navigateToSignup}>
+        <Text style={styles.linkText}>Don't have an account? Sign up here</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,43 +76,46 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
     padding: 20,
+    backgroundColor: '#f9f9f9',
   },
   title: {
-    fontSize: 26,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#1D1C1F',
     marginBottom: 20,
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
+    color: '#333',
   },
   input: {
     width: '100%',
-    padding: 10,
+    padding: 15,
     marginVertical: 10,
     borderRadius: 8,
-    borderColor: '#636165',
+    borderColor: '#ccc',
     borderWidth: 1,
-    backgroundColor: '#F4F6F8',
+    backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#F34533',
+    backgroundColor: '#6c47ff',
     paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 10,
+    paddingHorizontal: 80,
+    borderRadius: 8,
     marginTop: 20,
   },
   buttonText: {
-    color: '#F9FAFB',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  linkButton: {
+    marginTop: 15,
+  },
   linkText: {
-    color: '#F34533',
-    marginTop: 20,
+    color: '#6c47ff',
+    fontSize: 14,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 
