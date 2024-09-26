@@ -49,6 +49,7 @@ const LoginScreen = () => {
         onChangeText={setEmail}
         autoCapitalize="none"
         style={styles.input}
+        placeholderTextColor="#636165"
       />
 
       <TextInput
@@ -58,10 +59,11 @@ const LoginScreen = () => {
         secureTextEntry
         autoCapitalize="none"
         style={styles.input}
+        placeholderTextColor="#636165"
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? <ActivityIndicator color="#fff" /> : 'Login'}</Text>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Log In</Text>}
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.linkButton} onPress={navigateToSignup}>
@@ -76,33 +78,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F9FAFB',
     padding: 20,
-    backgroundColor: '#f9f9f9',
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#1D1C1F',
     marginBottom: 20,
-    color: '#333',
   },
   input: {
     width: '100%',
     padding: 15,
     marginVertical: 10,
     borderRadius: 8,
-    borderColor: '#ccc',
+    borderColor: '#636165',
     borderWidth: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F4F6F8',
+    color: '#1D1C1F',
   },
   button: {
-    backgroundColor: '#6c47ff',
+    backgroundColor: '#F34533',
     paddingVertical: 15,
     paddingHorizontal: 80,
     borderRadius: 8,
     marginTop: 20,
   },
   buttonText: {
-    color: '#fff',
+    color: '#F9FAFB',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   linkText: {
-    color: '#6c47ff',
+    color: '#F34533',
     fontSize: 14,
   },
   error: {
