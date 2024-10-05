@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Camera } from 'expo-camera'; // Ensure correct import
+import { Camera } from 'expo-camera';
 
 export default function RecordScreen() {
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(Camera?.Constants?.Type?.back || null);
 
   useEffect(() => {
-    console.log(Camera.Constants); // Log Camera.Constants to debug
+    console.log(Camera.Constants); // Debugging log
 
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync(); // Correct method
-      console.log('Camera permission status:', status); // Log permission status
+      const { status } = await Camera.requestCameraPermissionsAsync(); // Requesting camera permission
+      console.log('Camera permission status:', status); // Logging permission status
       setHasPermission(status === 'granted');
     })();
   }, []);
@@ -25,7 +25,11 @@ export default function RecordScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type} />
+      {type ? (
+        <Camera style={styles.camera} type={type} />
+      ) : (
+        <Text>Error loading camera type</Text>
+      )}
     </View>
   );
 }

@@ -1,53 +1,61 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+// UploadScreen.js
+import React, { useState } from 'react';
+import { View, Button, Text, ActivityIndicator, Alert } from 'react-native';
+import * as DocumentPicker from 'expo-image-picker';
 
-export default function UploadScreen() {
-  const navigation = useNavigation();
 
-  // Dummy video URI for testing
-  const mockVideoUri = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Use any valid video URL
+const UploadScreen = ({ userId }) => {
+  const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState(null);
+  const [progress, setProgress] = useState(0);
 
-  // Navigate to VideoUploadScreen with dummy video
-  const navigateToVideoUpload = () => {
-    navigation.navigate('VideoUpload', { videoUri: mockVideoUri });
+  const pickVideo = async () => {
+    let result = await DocumentPicker.launchImageLibraryAsync({
+      mediaTypes: DocumentPicker.MediaTypeOptions.Videos,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setFile(result.assets[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      Alert.alert('No video selected', 'Please select a video to upload.');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const videoUrl = await uploadVideoToFirebase(file, setProgress); // Upload video and track progress
+      await storeVideoMetadata(videoUrl, file.name, userId); // Store video metadata
+      Alert.alert('Success', 'Video uploaded successfully');
+    } catch (error) {
+      console.error('Upload error:', error);
+      Alert.alert('Error', 'Video upload failed.');
+    } finally {
+      setUploading(false);
+      setProgress(0); // Reset progress after upload is complete
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Upload Your Workout Video</Text>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Button title="Pick Video" onPress={pickVideo} />
+      {file && <Text>Selected video: {file.name}</Text>}
 
-      {/* Bypass button for testing */}
-      <TouchableOpacity style={styles.uploadButton} onPress={navigateToVideoUpload}>
-        <Text style={styles.uploadButtonText}>Bypass and Navigate</Text>
-      </TouchableOpacity>
+      <Button title="Upload Video" onPress={handleUpload} disabled={uploading} />
+
+      {uploading && (
+        <View>
+          <Text>Uploading... {progress}%</Text>
+          <ActivityIndicator size="large" color="#F34533" />
+        </View>
+      )}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1D1C1F',
-    marginBottom: 20,
-  },
-  uploadButton: {
-    backgroundColor: '#F34533',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  uploadButtonText: {
-    color: '#F9FAFB',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+export default UploadScreen;

@@ -22,10 +22,8 @@ const LoginScreen = () => {
         password: password,
       });
 
-      // If sign-in is successful, set the session as active
       await setActive({ session: completeSignIn.createdSessionId });
 
-      // Navigate to MainApp (which contains the Home screen)
       navigation.navigate('MainApp');
     } catch (err) {
       setErrorMessage('Login failed: ' + err.errors[0].message);
@@ -40,7 +38,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back!</Text>
+      <Text style={styles.title}>Login to posture.ai</Text>
       {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
 
       <TextInput
